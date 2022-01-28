@@ -9,6 +9,7 @@ jobs:
     steps:
       - name: Find Exisitng Comment
         uses: actions/github-script@v5
+        id: find-comment
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -17,5 +18,6 @@ jobs:
              owner: context.repo.owner,
              repo: context.repo.repo
              })
-             
-
+      - name: Print comments
+        run: echo "${{steps.find-comment.outputs.result}}"
+           
