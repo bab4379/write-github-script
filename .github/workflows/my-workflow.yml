@@ -34,8 +34,13 @@ jobs:
              console.log("Status" + prComments.status)
              let count = 0
              for (const comment of prComments.data) {
-              console.log(comment)
               console.log("Count = " + count++)
+              console.log(comment.body)
+              
+              //look for a tag of some kind here
+              //set id
+              //break from loop
+              //use id to update commnet, else create...
              }
 
              
