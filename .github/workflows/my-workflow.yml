@@ -31,10 +31,11 @@ jobs:
              repo: context.repo.repo
              })
 
+             console.log("Status" + prComments.status)
              let count = 0
-             for (const comment of prComments) {
+             for (const comment of prComments.data) {
               console.log(comment)
-              console.log(count++)
+              console.log("Count = " + count++)
              }
 
              
