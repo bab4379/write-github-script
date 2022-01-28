@@ -25,13 +25,17 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-             const myComments = await github.rest.issues.listComments({
+             const prComments = await github.rest.issues.listComments({
              issue_number: context.issue.number,
              owner: context.repo.owner,
              repo: context.repo.repo
              })
-             console.log(myComments)
-             return myComments
-      - name: Print comments
-        run: echo "${{steps.find-comment.outputs.result}}"
+
+             let count = 0
+             for (const comment of prComments) {
+              console.log(comment)
+              console.log(count++)
+             }
+
+             
            
