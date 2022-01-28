@@ -1,38 +1,20 @@
 name: Learning GitHub Script
 
 on:
-  issues:
-    types: [opened]
+  pull_request:
 
 jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Comment on new issue
+      - name: Comment on PR
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-             const fs = require('fs')
-             const issueBody = fs.readFileSync(".github/ISSUE_RESPONSES/comment.md", "utf8")
              github.rest.issues.createComment({
              issue_number: context.issue.number,
              owner: context.repo.owner,
              repo: context.repo.repo,
-             body: issueBody
+             body: 'Brent comment, eventually the terraform plan'
              })
-
-      - name: Add issue to project board
-        if: contains(github.event.issue.labels.*.name, 'bug')
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.projects.createCard({
-            column_id: 17602205,
-            content_id: context.payload.issue.id,
-            content_type: "Issue"
-            });
