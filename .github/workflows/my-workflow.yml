@@ -19,29 +19,18 @@ jobs:
              repo: context.repo.repo
              })
 
-             console.log("Status" + prComments.status)
-             let count = 0
-             let commentId;
-             for (const comment of prComments.data) {
-              console.log("Count = " + count++)
-              console.log(comment.body)
-              
-              //look for a tag of some kind here
-              if (comment.body.includes("Your Terraform Plan")) {
-                //set id
-                commentId = comment.id
-                break
-              }
-             }  
+             let existingComment = prComments.data.find((comment) => { 
+              return comment.body.includes("Your Terraform Plan")
+             })
 
              //use id to update commnet, else create...
-             if(commentId) {
+             if(existingComment) {
                console.log("Should Update")
                github.rest.issues.updateComment({
-                 comment_id: commentId,
+                 comment_id: existingComment.id,
                  owner: context.repo.owner,
                  repo: context.repo.repo,
-                 body: 'I updated this comment at ' + Date.now()
+                 body: existingComment.body + '  I updated this comment at ' + Date.now()
                })
              }
              else {
@@ -50,7 +39,7 @@ jobs:
                  issue_number: context.issue.number,
                  owner: context.repo.owner,
                  repo: context.repo.repo,
-                 body: 'This is a brand new comment.'
+                 body: 'Your Terraform Plan.'
                })
              }
 
