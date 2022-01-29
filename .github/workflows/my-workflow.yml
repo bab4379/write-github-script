@@ -27,7 +27,7 @@ jobs:
               console.log(comment.body)
               
               //look for a tag of some kind here
-              if (comment.includes("Your Terraform Plan")) {
+              if (comment.body.includes("Your Terraform Plan")) {
                 //set id
                 commentId = comment.id
                 break
@@ -37,9 +37,21 @@ jobs:
              //use id to update commnet, else create...
              if(commentId) {
                console.log("Should Update")
+               github.rest.issues.updateComment({
+                 comment_id: commentId,
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 body: 'I updated this comment at ' + Date.now()
+               })
              }
              else {
                console.log("Should Add New")
+               github.rest.issues.createComment({
+                 issue_number: context.issue.number,
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 body: 'This is a brand new comment.'
+               })
              }
 
 
